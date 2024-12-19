@@ -2,7 +2,6 @@ import './globals.css';
 import { Inter, Plus_Jakarta_Sans, Noto_Sans } from 'next/font/google';
 import { Providers } from '@/components/providers';
 import { SITE_CONFIG } from '@/lib/constants';
-import Script from 'next/script';
 import type { Metadata } from 'next';
 
 const inter = Inter({
@@ -24,11 +23,10 @@ const notoSans = Noto_Sans({
   variable: '--font-noto-sans',
   display: 'swap',
 });
-
 export const metadata: Metadata = {
   title: {
     default: SITE_CONFIG.name,
-    template: `%s | ${SITE_CONFIG.name}`,
+    template: %s | ${SITE_CONFIG.name},
   },
   description: SITE_CONFIG.description,
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -71,17 +69,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={${inter.variable} ${plusJakarta.variable} ${notoSans.variable}} suppressHydrationWarning>
       <body className="antialiased" suppressHydrationWarning>
-        {/* Add AdSense Script */}
-        <Script
-          id="adsense-init"
-          async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-          onError={() => console.error('Failed to load AdSense script')}
-        />
         <Providers>{children}</Providers>
       </body>
     </html>
