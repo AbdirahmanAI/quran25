@@ -18,13 +18,13 @@ export default function PrivacyPage() {
           <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
             <p>Effective Date: December 11, 2024</p>
             <span>•</span>
-            <p>Last Updated: December 11, 2024</p>
+            <p>Last Updated: December 19, 2024</p>
           </div>
         </div>
         
         <div className="prose dark:prose-invert max-w-none space-y-8">
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website (MyQuran).
+            Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your information when you use our website (Qurankareem.app).
           </p>
 
           <Card>
