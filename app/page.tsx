@@ -118,7 +118,7 @@ export default function Home() {
 const features = [
   {
     icon: <BookOpen className="h-6 w-6 text-primary" />,
-    title: "Complete Qurans",
+    title: "Complete Quran",
     description: "Access the complete Quran with beautiful Arabic typography and translations"
   },
   {
