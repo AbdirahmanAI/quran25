@@ -27,7 +27,7 @@ export default function DonationDialog() {
     setTimeout(() => {
       toast({
         title: "Thank you for considering a donation!",
-        description: "Your support helps us maintain and improve MyQuran.so.",
+        description: "Your support helps us maintain and improve qurankareem.app.",
       });
     }, 1000);
   }, [toast]);
