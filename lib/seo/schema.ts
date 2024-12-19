@@ -2,7 +2,7 @@ export function generateMobileAppSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'MobileApplication',
-    'name': 'Quran Kareem',
+    'name': 'Quran Kareem - Read, Listen, and Reflect',
     'applicationCategory': 'ReligiousApp',
     'operatingSystem': 'Any',
     'offers': {
@@ -10,7 +10,13 @@ export function generateMobileAppSchema() {
       'price': '0',
       'priceCurrency': 'USD'
     },
-    'description': 'A modern digital platform for exploring and studying the Holy Quran',
+    'description': 'Memorize Quran with modern technology',
+    'url': 'https://qurankareem.app', // Added URL for the app
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'Quran Kareem',
+      'url': 'https://qurankareem.app'
+    }
   };
 }
 
@@ -18,12 +24,20 @@ export function generateBreadcrumbSchema(items: Array<{ name: string; url: strin
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
-    'itemListElement': items.map((item, index) => ({
-      '@type': 'ListItem',
-      'position': index + 1,
-      'name': item.name,
-      'item': `https://qurankareem.app${item.url}`
-    }))
+    'itemListElement': [
+      {
+        '@type': 'ListItem',
+        'position': 1,
+        'name': 'Home',
+        'item': 'https://qurankareem.app/'
+      },
+      ...items.map((item, index) => ({
+        '@type': 'ListItem',
+        'position': index + 2, // Adjust for the homepage
+        'name': item.name,
+        'item': `https://qurankareem.app${item.url}`
+      }))
+    ]
   };
 }
 
@@ -32,6 +46,7 @@ export function generateQuranChapterSchema(chapter: {
   name: string;
   englishName: string;
   versesCount: number;
+  url?: string; // Added optional URL
 }) {
   return {
     '@context': 'https://schema.org',
@@ -47,6 +62,8 @@ export function generateQuranChapterSchema(chapter: {
         '@type': 'Organization',
         'name': 'Quran Kareem'
       }
-    }
+    },
+    ...(chapter.url ? { url: `https://qurankareem.app${chapter.url}` } : {}), // Added URL if provided
+    'inLanguage': 'ar' // Specified language
   };
 }
