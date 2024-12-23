@@ -31,7 +31,7 @@ export default function AboutPage() {
                 <div>
                   <h2 className="text-xl font-semibold mb-3">Our Mission</h2>
                   <p className="text-muted-foreground leading-relaxed">
-                    As-salaam-alaikum, I&apos;m Abdirahman Ahmed, the creator of Quran Kareem. This project is a deeply personal endeavor, 
+                    As-salaam-alaikum, I&apos;m Abdirahman Ahmed, the creator of QuranKareem.app This project is a deeply personal endeavor, 
                     dedicated to my beloved parents and ultimately for the sake of the afterlife, Insha&apos;Allah. Their love, prayers, 
                     and sacrifices have shaped who I am today, and this platform is a reflection of my gratitude.
                   </p>
