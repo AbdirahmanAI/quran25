@@ -40,4 +40,18 @@ export interface AnalyticsService {
   trackPageView(path: string): void;
 }
 
+export function initializeGTM() {
+  if (typeof window === 'undefined' || !ANALYTICS_CONFIG.gtmId) return;
+
+  // Add GTM script to the head
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtm.js?id=${ANALYTICS_CONFIG.gtmId}`;
+  document.head.appendChild(script);
+
+  // Initialize the dataLayer
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+}
+
 
