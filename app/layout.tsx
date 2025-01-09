@@ -3,6 +3,7 @@ import { Inter, Plus_Jakarta_Sans, Noto_Sans } from 'next/font/google';
 import { Providers } from '@/components/providers';
 import { SITE_CONFIG } from '@/lib/constants';
 import type { Metadata } from 'next';
+import GoogleTagManager from '@/components/analytics/google-tag-manager';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -27,7 +28,7 @@ const notoSans = Noto_Sans({
 export const metadata: Metadata = {
   title: {
     default: SITE_CONFIG.name,
-    template: `%s | ${SITE_CONFIG.name}`, // Fixed syntax
+    template: `%s | ${SITE_CONFIG.name}`,
   },
   description: SITE_CONFIG.description,
   metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'),
@@ -70,11 +71,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`} // Fixed syntax
-      suppressHydrationWarning
-    >
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`} suppressHydrationWarning>
+      <head>
+        <GoogleTagManager />
+      </head>
       <body className="antialiased" suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>
