@@ -7,6 +7,7 @@ export const ANALYTICS_CONFIG = {
   development: process.env.NODE_ENV === 'development',
 } as const;
 
+
 /**
  * Represents an analytics event to be tracked.
  */
@@ -38,3 +39,5 @@ export interface AnalyticsService {
    */
   trackPageView(path: string): void;
 }
+
+
