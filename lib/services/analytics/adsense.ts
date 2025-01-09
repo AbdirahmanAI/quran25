@@ -5,7 +5,7 @@ import { AnalyticsError } from './errors';
 class AdSenseService {
   private static instance: AdSenseService;
   private initialized = false;
-  private readonly clientId = 'ca-pub-4289944399243370';
+  private readonly clientId = 'pub-4289944399243370';
   private initializationPromise: Promise<void> | null = null;
 
   private constructor() {}
