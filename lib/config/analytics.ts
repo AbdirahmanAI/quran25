@@ -3,20 +3,37 @@ export const ANALYTICS_CONFIG = {
   debug: process.env.NEXT_PUBLIC_ENABLE_DEBUG === 'true',
   gaId: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_GA_ID : undefined,
   adsenseId: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_ADSENSE_ID : undefined,
-  development: process.env.NODE_ENV === 'development'
+  development: process.env.NODE_ENV === 'development',
 } as const;
 
-// Analytics event types
+/**
+ * Represents an analytics event to be tracked.
+ */
 export type AnalyticsEvent = {
-  category: string;
-  action: string;
-  label?: string;
-  value?: number;
+  category: string; // The category of the event (e.g., "User", "Navigation").
+  action: string;   // The action being tracked (e.g., "Click", "View").
+  label?: string;   // Optional label providing additional information.
+  value?: number;   // Optional value associated with the event.
 };
 
-// Analytics service interface
+/**
+ * Interface for an analytics service.
+ */
 export interface AnalyticsService {
+  /**
+   * Initializes the analytics service.
+   */
   initialize(): Promise<void>;
+
+  /**
+   * Tracks an analytics event.
+   * @param event - The analytics event to track.
+   */
   trackEvent(event: AnalyticsEvent): void;
+
+  /**
+   * Tracks a page view.
+   * @param path - The path of the page being viewed.
+   */
   trackPageView(path: string): void;
 }
