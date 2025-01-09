@@ -3,6 +3,7 @@ export const ANALYTICS_CONFIG = {
   debug: process.env.NEXT_PUBLIC_ENABLE_DEBUG === 'true',
   gaId: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_GA_ID : undefined,
   adsenseId: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_ADSENSE_ID : undefined,
+  gtmId: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_GTM_ID : undefined, // Add GTM ID
   development: process.env.NODE_ENV === 'development',
 } as const;
 
