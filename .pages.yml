@@ -1,0 +1,26 @@
+collections:
+  - name: pages
+    label: Pages
+    folder: "pages"  # This folder will hold your markdown or content files.
+    create: true  # Allows you to create new pages via Pages CMS.
+    slug: "{{slug}}"  # Defines how the URL slug is generated.
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Content", name: "content", widget: "markdown" }
+
+  - name: quran
+    label: Quran
+    folder: "content/quran"  # Folder for Quran content files.
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Surah Name", name: "surah_name", widget: "string" }
+      - { label: "Verse", name: "verse", widget: "markdown" }
+
+files:
+  - name: config
+    label: Config
+    file: "config.yml"
+    fields:
+      - { label: "Site Name", name: "site_name", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
