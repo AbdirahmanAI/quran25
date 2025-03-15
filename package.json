@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run clean && next build && cp -r public/* out/ && cp -r .next/static out/_next/ && touch out/.nojekyll && next-sitemap",
+    "build": "npm run clean && next build && cp -r public/* out/ && cp -r .next/static out/_next/static/ && touch out/.nojekyll && next-sitemap",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",

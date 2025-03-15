@@ -74,7 +74,18 @@ const nextConfig = {
       use: ['style-loader', 'css-loader', 'postcss-loader'],
     });
 
+    config.module.rules.push({
+      test: /\.js$/,
+      type: 'javascript/auto',
+      resolve: {
+        fullySpecified: false,
+      },
+    });
+
     return config;
+  },
+  generateBuildId: async () => {
+    return 'build-' + Date.now();
   }
 };
 
