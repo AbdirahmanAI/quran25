@@ -58,7 +58,7 @@ const nextConfig = {
   poweredByHeader: false,
   trailingSlash: true,
   experimental: {
-    optimizeCss: true,
+    optimizeCss: false,
     optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react']
   },
   staticPageGenerationTimeout: 300,
@@ -67,26 +67,7 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production'
   },
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  assetPrefix: process.env.NEXT_PUBLIC_BASE_URL || '',
-  webpack: (config, { isServer }) => {
-    config.module.rules.push({
-      test: /\.css$/,
-      use: ['style-loader', 'css-loader', 'postcss-loader'],
-    });
-
-    config.module.rules.push({
-      test: /\.js$/,
-      type: 'javascript/auto',
-      resolve: {
-        fullySpecified: false,
-      },
-    });
-
-    return config;
-  },
-  generateBuildId: async () => {
-    return 'build-' + Date.now();
-  }
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_URL || ''
 };
 
 module.exports = nextConfig;
