@@ -1,9 +1,9 @@
 'use client';
 
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AudioProvider } from '@/lib/audio-context';
-import { FontProvider } from '@/lib/font-context';
 import { FontProvider } from '@/lib/font-context';
 import { useEffect } from 'react';
 import { preloadResources } from '@/lib/utils/performance';
@@ -37,15 +37,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
       enableSystem
       disableTransitionOnChange
     >
-      <AudioProvider>
-        <FontProvider>
-        <FontProvider>
+      <FontProvider>
+        <AudioProvider>
           <TooltipProvider>
             {children}
+            <Toaster />
           </TooltipProvider>
-        </FontProvider>
-        </FontProvider>
-      </AudioProvider>
+        </AudioProvider>
+      </FontProvider>
     </ThemeProvider>
   );
 }

@@ -5,11 +5,11 @@ const rateLimit = new Map<string, { count: number; timestamp: number }>();
 
 function cleanupRateLimit() {
   const now = Date.now();
-  for (const [ip, data] of rateLimit.entries()) {
+  Array.from(rateLimit.entries()).forEach(([ip, data]) => {
     if (now - data.timestamp > WINDOW_SIZE) {
       rateLimit.delete(ip);
     }
-  }
+  });
 }
 
 function checkRateLimit(ip: string): boolean {

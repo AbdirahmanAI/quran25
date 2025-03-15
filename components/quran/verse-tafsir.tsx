@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Loader2, AlertCircle, RefreshCcw, Languages } from 'lucide-react';
 import { getTafsir } from '@/lib/services/tafsir';
-import { TAFSIR_EDITIONS } from '@/lib/services/tafsir/config';
+import { TAFSIR_EDITIONS, type TafsirEditionId } from '@/lib/services/tafsir/config';
 import { TafsirError } from '@/lib/services/tafsir/errors';
 import { useToast } from '@/hooks/use-toast';
 
@@ -17,7 +17,7 @@ interface VerseTafsirProps {
 }
 
 export default function VerseTafsir({ verseKey, onClose }: VerseTafsirProps) {
-  const [selectedEdition, setSelectedEdition] = useState(TAFSIR_EDITIONS[0].id);
+  const [selectedEdition, setSelectedEdition] = useState<TafsirEditionId>(169);
   const [tafsirText, setTafsirText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -30,9 +30,10 @@ export default function VerseTafsir({ verseKey, onClose }: VerseTafsirProps) {
     setError(null);
 
     try {
-      const [chapter, verse] = verseKey.split(':').map(Number);
-      const tafsir = await getTafsir(chapter, verse, selectedEdition);
-      setTafsirText(tafsir.text);
+      const tafsirContent = await getTafsir(verseKey, selectedEdition);
+      if (tafsirContent?.text) {
+        setTafsirText(tafsirContent.text);
+      }
     } catch (error) {
       let errorMessage = 'Failed to load tafsir. Please try another verse or edition.';
       
@@ -78,7 +79,12 @@ export default function VerseTafsir({ verseKey, onClose }: VerseTafsirProps) {
         <div className="mt-2">
           <Select
             value={selectedEdition.toString()}
-            onValueChange={(value) => setSelectedEdition(parseInt(value))}
+            onValueChange={(value) => {
+              const editionId = TAFSIR_EDITIONS.find(e => e.id.toString() === value)?.id;
+              if (editionId) {
+                setSelectedEdition(editionId);
+              }
+            }}
           >
             <SelectTrigger>
               <SelectValue placeholder="Select Tafsir" />

@@ -7,9 +7,9 @@ interface FormatTafsirInput {
   verseTranslation: string;
   tafsirId: number;
   verse: {
+    key: string;
     chapter: number;
     number: number;
-    key: string;
   };
 }
 
@@ -53,6 +53,12 @@ export function formatTafsirContent(input: FormatTafsirInput): TafsirContent {
       </div>
     `,
     edition,
-    verse: input.verse
+    verse: {
+      key: input.verse.key,
+      text: input.verseText,
+      translation: input.verseTranslation,
+      number: input.verse.number,
+      chapter: input.verse.chapter
+    }
   };
 }

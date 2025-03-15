@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -9,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { Verse } from '@/lib/types';
 import AudioPlayer from '@/components/quran/audio-player';
 import BookmarkButton from '@/components/quran/bookmark-button';
+import { useVerseState } from '@/hooks/useVerseState';
 
 interface VerseCardProps {
   verse: Verse;
@@ -20,7 +22,7 @@ interface VerseCardProps {
   onNextVerse?: () => void;
 }
 
-export default function VerseCard({
+const VerseCard = memo(function VerseCard({
   verse,
   chapterNumber,
   totalVerses,
@@ -29,6 +31,11 @@ export default function VerseCard({
   onVerseComplete,
   onNextVerse
 }: VerseCardProps) {
+  const {
+    isLoading,
+    handleVerseChange,
+  } = useVerseState(verse);
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -49,11 +56,13 @@ export default function VerseCard({
         <CardContent className="p-4">
           <div className="flex justify-between items-start mb-2">
             <div className="flex items-center gap-2">
-              <Badge variant="outline">
+              <Badge variant="outline" aria-label={`Verse ${chapterNumber}:${verse.number}`}>
                 {chapterNumber}:{verse.number}
               </Badge>
               {verse.juzNumber && (
-                <Badge variant="secondary">Juz {verse.juzNumber}</Badge>
+                <Badge variant="secondary" aria-label={`Juz ${verse.juzNumber}`}>
+                  Juz {verse.juzNumber}
+                </Badge>
               )}
             </div>
             <div className="flex items-center gap-2">
@@ -72,6 +81,7 @@ export default function VerseCard({
               <Button
                 variant="outline"
                 size="sm"
+                aria-label="Study verse"
                 onClick={() => {/* Add study mode handler */}}
               >
                 <PenTool className="h-4 w-4 mr-2" />
@@ -80,6 +90,7 @@ export default function VerseCard({
               <Button
                 variant="outline"
                 size="sm"
+                aria-label="Analyze verse"
                 onClick={() => {/* Add analysis handler */}}
               >
                 <Book className="h-4 w-4 mr-2" />
@@ -88,10 +99,19 @@ export default function VerseCard({
             </div>
           </div>
           <div className="space-y-4">
-            <div dir="rtl" className="arabic-text text-right">
+            <div 
+              dir="rtl" 
+              className="arabic-text text-right"
+              lang="ar"
+              aria-label="Arabic verse text"
+            >
               {verse.text}
             </div>
-            <div className="translation-text text-muted-foreground border-t pt-4">
+            <div 
+              className="translation-text text-muted-foreground border-t pt-4"
+              lang="en"
+              aria-label="English translation"
+            >
               {verse.translation}
             </div>
           </div>
@@ -99,4 +119,6 @@ export default function VerseCard({
       </Card>
     </motion.div>
   );
-}
+});
+
+export default VerseCard;

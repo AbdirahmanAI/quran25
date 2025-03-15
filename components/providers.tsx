@@ -12,6 +12,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import PageViewTracker from '@/components/analytics/page-view-tracker';
 import { clearLocalStorageIfNeeded } from '@/lib/utils';
+import { Suspense } from 'react';
 
 const GoogleAnalytics = dynamic(() => import('./analytics/google-analytics'), {
   ssr: false
@@ -38,12 +39,18 @@ export function Providers({ children }: ProvidersProps) {
           <TooltipProvider>
             <div className="flex flex-col min-h-screen">
               <Header />
-              <main className="flex-1">{children}</main>
+              <main className="flex-1">
+                <Suspense fallback={null}>
+                  {children}
+                </Suspense>
+              </main>
               <Footer />
-              <PageViewTracker />
-              <GoogleAnalytics />
-              <Toaster />
-              <CookieConsent />
+              <Suspense fallback={null}>
+                <PageViewTracker />
+                <GoogleAnalytics />
+                <Toaster />
+                <CookieConsent />
+              </Suspense>
             </div>
           </TooltipProvider>
         </FontProvider>

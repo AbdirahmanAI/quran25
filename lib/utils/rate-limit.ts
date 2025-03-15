@@ -5,7 +5,7 @@ interface RateLimitResult {
   reset?: number;
 }
 
-const rateLimit = new Map<string, { count: number; timestamp: number }>();
+const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const WINDOW_SIZE = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 60; // 60 requests per minute
 
@@ -19,20 +19,20 @@ export async function rateLimit(request: Request): Promise<RateLimitResult> {
   const windowStart = now - WINDOW_SIZE;
 
   // Clean up old entries
-  for (const [key, data] of rateLimit.entries()) {
+  Array.from(rateLimitMap.entries()).forEach(([key, data]) => {
     if (data.timestamp < windowStart) {
-      rateLimit.delete(key);
+      rateLimitMap.delete(key);
     }
-  }
+  });
 
-  const data = rateLimit.get(ip);
+  const data = rateLimitMap.get(ip);
   if (!data) {
-    rateLimit.set(ip, { count: 1, timestamp: now });
+    rateLimitMap.set(ip, { count: 1, timestamp: now });
     return { success: true, limit: MAX_REQUESTS, remaining: MAX_REQUESTS - 1 };
   }
 
   if (data.timestamp < windowStart) {
-    rateLimit.set(ip, { count: 1, timestamp: now });
+    rateLimitMap.set(ip, { count: 1, timestamp: now });
     return { success: true, limit: MAX_REQUESTS, remaining: MAX_REQUESTS - 1 };
   }
 

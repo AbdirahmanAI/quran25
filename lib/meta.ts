@@ -1,11 +1,11 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { SITE_CONFIG } from './constants';
 
 interface GenerateMetaProps {
   title: string;
   description: string;
   path: string;
-  type?: string;
+  type?: 'website' | 'article';
   image?: string;
 }
 
@@ -60,5 +60,14 @@ export function generateMeta({
 export const META = {
   title: 'Quran Kareem - Digital Quran Experience',
   description: 'Experience the Holy Quran with modern digital features - Read, Listen, Learn, and Reflect',
-  themeColor: '#000000',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' }
+  ]
 };

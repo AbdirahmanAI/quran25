@@ -55,7 +55,7 @@ export class APIClient {
       } catch (error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
         
-        if (error instanceof APIError && error.status >= 400 && error.status < 500) {
+        if (error instanceof APIError && error.status !== undefined && error.status >= 400 && error.status < 500) {
           throw error; // Don't retry client errors
         }
 

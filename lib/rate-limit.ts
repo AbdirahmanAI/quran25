@@ -8,7 +8,7 @@ class RateLimit {
     const windowStart = now - this.WINDOW_SIZE;
 
     // Clean up old entries
-    for (const [key, data] of this.requests) {
+    for (const [key, data] of Array.from(this.requests.entries())) {
       if (data.timestamp < windowStart) {
         this.requests.delete(key);
       }

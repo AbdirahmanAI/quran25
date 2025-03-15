@@ -11,11 +11,11 @@ export interface Verse {
   number: number;
   text: string;
   translation: string;
-  audio: string;
-  audioTimestamp: number;
-  audioEndTimestamp: number;
-  verseKey: string;
   juzNumber?: number;
+  audio?: string;
+  audioTimestamp?: number;
+  audioEndTimestamp?: number;
+  verseKey?: string;
 }
 
 export interface AllahName {

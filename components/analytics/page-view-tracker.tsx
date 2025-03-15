@@ -3,8 +3,9 @@
 import { useEffect } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { trackPageView } from '@/lib/analytics/google-analytics';
+import { Suspense } from 'react';
 
-export default function PageViewTracker() {
+function PageViewTrackerInner() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -15,4 +16,12 @@ export default function PageViewTracker() {
   }, [pathname, searchParams]);
 
   return null;
+}
+
+export default function PageViewTracker() {
+  return (
+    <Suspense>
+      <PageViewTrackerInner />
+    </Suspense>
+  );
 }

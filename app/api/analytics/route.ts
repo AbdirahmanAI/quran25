@@ -54,6 +54,3 @@ export async function POST(request: NextRequest) {
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
-
-// Define allowed HTTP methods
-export const allowedMethods = ['POST'];

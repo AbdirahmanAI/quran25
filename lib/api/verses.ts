@@ -1,4 +1,4 @@
-import { Verse } from '@/types';
+import { Verse } from '@/lib/types';
 import { getAudioUrl } from '@/lib/services/audio';
 
 const API_BASE = 'https://api.qurancdn.com/api/qdc/verses/by_chapter';

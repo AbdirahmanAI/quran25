@@ -189,7 +189,7 @@ class AudioService {
   }
 
   public isPlaying(verseKey: string): boolean {
-    return this.currentVerseKey === verseKey && this.audio && !this.audio.paused;
+    return Boolean(this.currentVerseKey === verseKey && this.audio && !this.audio.paused);
   }
 }
 

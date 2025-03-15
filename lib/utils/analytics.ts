@@ -1,3 +1,5 @@
+import { ANALYTICS_CONFIG } from '@/lib/config/analytics';
+
 // Analytics utility for handling Google Analytics and AdSense
 export const initializeAnalytics = async () => {
   if (typeof window === 'undefined') {

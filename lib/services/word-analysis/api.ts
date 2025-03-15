@@ -14,11 +14,11 @@ function mapWordFields(word: WordFields): WordAnalysis {
     translation: word.translation?.text || '',
     rootWord: typeof word.root === 'string' 
       ? word.root 
-      : word.root?.text || word.root?.arabic || null,
+      : word.root?.text || word.root?.arabic || undefined,
     grammarInfo: word.grammar ? {
       type: word.grammar.type || '',
       details: word.grammar.description || ''
-    } : null
+    } : undefined
   };
 }
 

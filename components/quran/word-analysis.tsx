@@ -7,6 +7,7 @@ import {
   HoverCardTrigger,
 } from '@/components/ui/hover-card';
 import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
 
 interface WordAnalysisProps {
   word: WordAnalysis;
@@ -14,7 +15,11 @@ interface WordAnalysisProps {
   className?: string;
 }
 
-export default function WordAnalysisComponent({ 
+function LoadingFallback() {
+  return <span className="animate-pulse bg-accent/20 rounded px-2">...</span>;
+}
+
+function WordAnalysisContent({ 
   word, 
   showGrammar = true,
   className 
@@ -72,5 +77,13 @@ export default function WordAnalysisComponent({
         </div>
       </HoverCardContent>
     </HoverCard>
+  );
+}
+
+export default function WordAnalysisComponent(props: WordAnalysisProps) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <WordAnalysisContent {...props} />
+    </Suspense>
   );
 }

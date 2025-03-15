@@ -155,7 +155,7 @@ class OfflineManager {
     const db = await this.initDB();
     const sizes: { [key: string]: number } = {};
     
-    for (const storeName of db.objectStoreNames) {
+    for (const storeName of Array.from(db.objectStoreNames)) {
       const store = db.transaction(storeName).objectStore(storeName);
       const keys = await store.getAllKeys();
       sizes[storeName] = keys.length;

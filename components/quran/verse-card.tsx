@@ -1,12 +1,12 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Verse } from '@/lib/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { PenTool, Book } from 'lucide-react';
+import { PenTool, Book, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import AudioPlayer from './audio-player';
 import BookmarkButton from './bookmark-button';
@@ -23,7 +23,18 @@ interface VerseCardProps {
   onNextVerse?: () => void;
 }
 
-export default function VerseCard({
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-[100px]">
+      <div className="text-center">
+        <Loader2 className="h-5 w-5 animate-spin mx-auto mb-2 text-primary" />
+        <p className="text-sm text-muted-foreground">Loading...</p>
+      </div>
+    </div>
+  );
+}
+
+function VerseCardContent({
   verse,
   chapterNumber,
   totalVerses,
@@ -65,20 +76,22 @@ export default function VerseCard({
               )}
             </div>
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2">
-              <AudioPlayer
-                chapterNumber={chapterNumber}
-                verseNumber={verse.number}
-                totalVerses={totalVerses}
-                onPlayStateChange={onPlayStateChange}
-                onVerseComplete={onVerseComplete}
-                className="col-span-2 sm:w-auto"
-              />
-              <BookmarkButton
-                chapterId={chapterNumber}
-                verseNumber={verse.number}
-                title={`${chapterNumber}:${verse.number}`}
-                className="w-full sm:w-auto"
-              />
+              <Suspense fallback={<LoadingFallback />}>
+                <AudioPlayer
+                  chapterNumber={chapterNumber}
+                  verseNumber={verse.number}
+                  totalVerses={totalVerses}
+                  onPlayStateChange={onPlayStateChange}
+                  onVerseComplete={onVerseComplete}
+                  className="col-span-2 sm:w-auto"
+                />
+                <BookmarkButton
+                  chapterId={chapterNumber}
+                  verseNumber={verse.number}
+                  title={`${chapterNumber}:${verse.number}`}
+                  className="w-full sm:w-auto"
+                />
+              </Suspense>
               <Button
                 variant="outline"
                 size="sm"
@@ -127,21 +140,31 @@ export default function VerseCard({
               {verse.translation}
             </div>
           </div>
-          {showStudyMode && (
-            <VerseStudyMode
-              verse={verse}
-              chapterNumber={chapterNumber}
-              onClose={() => setShowStudyMode(false)}
-            />
-          )}
-          {showAnalysis && (
-            <VerseAnalysis
-              verseKey={verse.verseKey}
-              onClose={() => setShowAnalysis(false)}
-            />
-          )}
+          <Suspense fallback={<LoadingFallback />}>
+            {showStudyMode && (
+              <VerseStudyMode
+                verse={verse}
+                chapterNumber={chapterNumber}
+                onClose={() => setShowStudyMode(false)}
+              />
+            )}
+            {showAnalysis && verse.verseKey && (
+              <VerseAnalysis
+                verseKey={verse.verseKey}
+                onClose={() => setShowAnalysis(false)}
+              />
+            )}
+          </Suspense>
         </CardContent>
       </Card>
     </motion.div>
+  );
+}
+
+export default function VerseCard(props: VerseCardProps) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <VerseCardContent {...props} />
+    </Suspense>
   );
 }

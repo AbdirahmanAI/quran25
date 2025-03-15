@@ -3,7 +3,7 @@ import { getVerseDetails } from './api/verse';
 import { TafsirCache } from './cache';
 import { formatTafsirContent } from './utils/formatter';
 import { TafsirError } from './errors';
-import { TafsirContent } from './types/models';
+import { TafsirContent, TafsirEdition } from './types';
 import { TAFSIR_EDITIONS } from './config';
 
 export async function getTafsir(
@@ -12,13 +12,22 @@ export async function getTafsir(
   tafsirId: number
 ): Promise<TafsirContent> {
   const verseKey = `${chapterNumber}:${verseNumber}`;
-  const cacheKey = `${verseKey}:${tafsirId}`;
 
   try {
     // Check cache first
-    const cached = await TafsirCache.get(cacheKey);
+    const cached = await TafsirCache.get(verseKey, tafsirId);
     if (cached) {
-      return cached;
+      return formatTafsirContent({
+        text: cached.text,
+        verseText: cached.verse.text,
+        verseTranslation: cached.verse.translation,
+        tafsirId: cached.edition.id,
+        verse: {
+          key: verseKey,
+          chapter: chapterNumber,
+          number: verseNumber
+        }
+      });
     }
 
     // Fetch verse details and tafsir content in parallel
@@ -28,9 +37,9 @@ export async function getTafsir(
     ]);
 
     const content = formatTafsirContent({
-      text: tafsirContent.tafsir.text,
-      verseText: verseDetails.verse.text_uthmani,
-      verseTranslation: verseDetails.verse.translations[0]?.text || '',
+      text: tafsirContent.data.text,
+      verseText: verseDetails.text_uthmani,
+      verseTranslation: verseDetails.translations[0]?.text || '',
       tafsirId,
       verse: {
         key: verseKey,
@@ -40,7 +49,18 @@ export async function getTafsir(
     });
 
     // Cache the result
-    await TafsirCache.set(cacheKey, content);
+    await TafsirCache.set(verseKey, tafsirId, {
+      text: tafsirContent.data.text,
+      edition: TAFSIR_EDITIONS.find(e => e.id === tafsirId)!,
+      verse: {
+        key: verseKey,
+        text: verseDetails.text_uthmani,
+        translation: verseDetails.translations[0]?.text || '',
+        number: verseNumber,
+        chapter: chapterNumber
+      }
+    });
+    
     return content;
 
   } catch (error) {

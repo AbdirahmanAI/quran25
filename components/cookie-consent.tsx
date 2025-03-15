@@ -1,30 +1,26 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { CookieConsent, getConsentCookie } from '@/lib/utils/cookies';
+import type { CookieConsent } from '@/lib/utils/cookies';
+import { getConsentCookie } from '@/lib/utils/cookies';
 import CookieBanner from './cookie-consent/cookie-banner';
 import { initializeAnalytics } from '@/lib/analytics/google-analytics';
 
-export default function CookieConsent() {
-  const [showBanner, setShowBanner] = useState(false);
+export default function CookieConsentManager() {
+  const [consent, setConsent] = useState<CookieConsent | null>(null);
 
   useEffect(() => {
-    const consent = getConsentCookie();
-    if (!consent) {
-      setShowBanner(true);
-    } else if (consent.analytics) {
+    const storedConsent = getConsentCookie();
+    setConsent(storedConsent);
+
+    if (storedConsent?.analytics) {
       initializeAnalytics();
     }
   }, []);
 
-  const handleConsent = (consent: CookieConsent) => {
-    setShowBanner(false);
-    if (consent.analytics) {
-      initializeAnalytics();
-    }
-  };
+  if (!consent) {
+    return <CookieBanner onConsent={setConsent} />;
+  }
 
-  if (!showBanner) return null;
-
-  return <CookieBanner onConsent={handleConsent} />;
+  return null;
 }

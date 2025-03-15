@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { VerseAnalysis } from '@/lib/types';
 import { getVerseWordAnalysis } from '@/lib/services/word-analysis/api';
 import { APIError } from '@/lib/services/api/errors';
@@ -22,7 +22,18 @@ interface VerseAnalysisProps {
   onClose?: () => void;
 }
 
-export default function VerseAnalysisComponent({ verseKey, onClose }: VerseAnalysisProps) {
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center min-h-[200px]">
+      <div className="text-center">
+        <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2 text-primary" />
+        <p className="text-sm text-muted-foreground">Loading analysis...</p>
+      </div>
+    </div>
+  );
+}
+
+function VerseAnalysisContent({ verseKey, onClose }: VerseAnalysisProps) {
   const { toast } = useToast();
   const [analysis, setAnalysis] = useState<VerseAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -162,54 +173,66 @@ export default function VerseAnalysisComponent({ verseKey, onClose }: VerseAnaly
           <TabsContent value="word-by-word" className="space-y-4">
             <div className="flex flex-wrap justify-end gap-3 sm:gap-4 leading-loose text-right 
                           overflow-x-auto p-2 rounded-lg bg-accent/5">
-              {analysis?.words.map((word, index) => (
-                <WordAnalysisComponent 
-                  key={index} 
-                  word={word}
-                  showGrammar={false}
-                  className="text-lg sm:text-xl"
-                />
-              ))}
+              <Suspense fallback={<LoadingFallback />}>
+                {analysis?.words.map((word, index) => (
+                  <WordAnalysisComponent 
+                    key={index} 
+                    word={word}
+                    showGrammar={false}
+                    className="text-lg sm:text-xl"
+                  />
+                ))}
+              </Suspense>
             </div>
           </TabsContent>
 
           <TabsContent value="grammar" className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {analysis?.words.map((word, index) => (
-                <Card key={index} className="overflow-hidden bg-accent/5 hover:bg-accent/10 transition-colors">
-                  <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-xl sm:text-2xl font-amiri">{word.text}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {word.transliteration}
-                        </span>
+              <Suspense fallback={<LoadingFallback />}>
+                {analysis?.words.map((word, index) => (
+                  <Card key={index} className="overflow-hidden bg-accent/5 hover:bg-accent/10 transition-colors">
+                    <CardContent className="p-3 sm:p-4 space-y-2 sm:space-y-3">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-xl sm:text-2xl font-amiri">{word.text}</span>
+                          <span className="text-sm text-muted-foreground">
+                            {word.transliteration}
+                          </span>
+                        </div>
+                        <div className="space-y-2 pt-2 border-t">
+                          <p className="text-sm leading-relaxed">{word.translation}</p>
+                          {word.grammarInfo && (
+                            <div className="text-sm text-muted-foreground">
+                              <span className="font-medium">{word.grammarInfo.type}</span>
+                              {word.grammarInfo.details && (
+                                <span> - {word.grammarInfo.details}</span>
+                              )}
+                            </div>
+                          )}
+                          {word.rootWord && (
+                            <div className="text-sm flex items-center gap-1">
+                              <span className="text-muted-foreground">Root:</span>
+                              <span className="font-amiri text-lg">{word.rootWord}</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="space-y-2 pt-2 border-t">
-                        <p className="text-sm leading-relaxed">{word.translation}</p>
-                        {word.grammarInfo && (
-                          <div className="text-sm text-muted-foreground">
-                            <span className="font-medium">{word.grammarInfo.type}</span>
-                            {word.grammarInfo.details && (
-                              <span> - {word.grammarInfo.details}</span>
-                            )}
-                          </div>
-                        )}
-                        {word.rootWord && (
-                          <div className="text-sm flex items-center gap-1">
-                            <span className="text-muted-foreground">Root:</span>
-                            <span className="font-amiri text-lg">{word.rootWord}</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardContent>
+                  </Card>
+                ))}
+              </Suspense>
             </div>
           </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
+  );
+}
+
+export default function VerseAnalysisComponent(props: VerseAnalysisProps) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <VerseAnalysisContent {...props} />
+    </Suspense>
   );
 }

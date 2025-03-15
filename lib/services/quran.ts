@@ -8,7 +8,7 @@ import { APIError } from '@/lib/errors';
 export async function getChapters(): Promise<Chapter[]> {
   try {
     const response = await apiClient.request<{chapters: any[]}>(`${API_CONFIG.QURAN_API_BASE}${API_CONFIG.ENDPOINTS.CHAPTERS}?language=en`, {
-      cache: true,
+      useCache: true,
       retries: 2
     });
 
@@ -30,7 +30,7 @@ export async function getChapter(chapterNumber: number): Promise<Chapter | null>
   try {
     const response = await apiClient.request<{chapter: any}>(
       `${API_CONFIG.QURAN_API_BASE}${API_CONFIG.ENDPOINTS.CHAPTERS}/${chapterNumber}?language=en`,
-      { cache: true }
+      { useCache: true }
     );
 
     const chapter = response.chapter;
@@ -54,7 +54,7 @@ export async function getVerses(chapterNumber: number): Promise<Verse[]> {
   try {
     const response = await apiClient.request<{verses: any[]}>(
       `${API_CONFIG.QURAN_API_BASE}${API_CONFIG.ENDPOINTS.VERSES}/${chapterNumber}?words=true&translations=131&fields=text_uthmani,verse_key&per_page=300`,
-      { cache: true }
+      { useCache: true }
     );
 
     return response.verses.map(verse => {

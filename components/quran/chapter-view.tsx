@@ -3,7 +3,7 @@
 import { Chapter, Verse } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { BookMarked } from 'lucide-react';
-import { useBookmarks } from '@/hooks/use-bookmarks';
+import { useBookmarks, type Bookmark } from '@/hooks/use-bookmarks';
 import { useToast } from '@/hooks/use-toast';
 import VerseList from './verse-list';
 
@@ -13,7 +13,7 @@ interface ChapterViewProps {
 }
 
 export default function ChapterView({ chapter, verses }: ChapterViewProps) {
-  const { addBookmark, removeBookmark, isBookmarked } = useBookmarks();
+  const { addBookmark, removeBookmark, isBookmarked, bookmarks } = useBookmarks();
   const { toast } = useToast();
 
   if (!chapter) {
@@ -27,23 +27,26 @@ export default function ChapterView({ chapter, verses }: ChapterViewProps) {
     );
   }
 
-  const chapterId = `quran-chapter-${chapter.number}`;
-  const bookmarked = isBookmarked(chapterId);
+  const bookmarked = isBookmarked(chapter.number);
 
   const handleBookmark = () => {
+    const bookmark = {
+      type: 'chapter' as const,
+      chapterId: chapter.number,
+      title: `${chapter.englishName} (${chapter.name})`,
+    };
+
     if (bookmarked) {
-      removeBookmark(chapterId);
-      toast({
-        title: 'Bookmark removed',
-        description: 'The chapter has been removed from your bookmarks.',
-      });
+      const existingBookmark = bookmarks.find((b: Bookmark) => b.chapterId === chapter.number && !b.verseNumber);
+      if (existingBookmark) {
+        removeBookmark(existingBookmark.id);
+        toast({
+          title: 'Bookmark removed',
+          description: 'The chapter has been removed from your bookmarks.',
+        });
+      }
     } else {
-      addBookmark({
-        id: chapterId,
-        type: 'quran',
-        title: `${chapter.englishName} (${chapter.name})`,
-        path: `/quran/${chapter.number}`,
-      });
+      addBookmark(bookmark);
       toast({
         title: 'Bookmark added',
         description: 'The chapter has been added to your bookmarks.',

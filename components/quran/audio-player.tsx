@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,15 @@ interface AudioPlayerProps {
   className?: string;
 }
 
-export default function AudioPlayer({
+function LoadingFallback() {
+  return (
+    <div className="flex items-center justify-center h-8">
+      <Loader2 className="h-4 w-4 animate-spin text-primary" />
+    </div>
+  );
+}
+
+function AudioPlayerContent({
   chapterNumber,
   verseNumber,
   totalVerses,
@@ -252,71 +260,71 @@ export default function AudioPlayer({
           </PopoverTrigger>
           <PopoverContent className="w-64" side="top" align="center">
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Playback Speed</Label>
-                <Slider
-                  value={[globalSettings.playbackSpeed * 100]}
-                  min={50}
-                  max={200}
-                  step={25}
-                  onValueChange={([value]) => {
-                    updateGlobalSettings({ 
-                      playbackSpeed: value / 100 
-                    });
-                  }}
-                  className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
+              <div className="flex items-center justify-between">
+                <Label>Auto-play Next</Label>
+                <Switch
+                  checked={globalSettings.autoPlay}
+                  onCheckedChange={(checked) =>
+                    updateGlobalSettings({ autoPlay: checked })
+                  }
                 />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>0.5x</span>
-                  <span>1x</span>
-                  <span>2x</span>
-                </div>
               </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label>Auto-play Next Verse</Label>
-                  <Switch
-                    checked={globalSettings.autoPlay}
-                    onCheckedChange={(checked) => {
-                      updateGlobalSettings({ autoPlay: checked });
-                    }}
+              <div className="flex items-center justify-between">
+                <Label>Repeat Mode</Label>
+                <Switch
+                  checked={globalSettings.repeatEnabled}
+                  onCheckedChange={(checked) =>
+                    updateGlobalSettings({ repeatEnabled: checked })
+                  }
+                />
+              </div>
+              {globalSettings.repeatEnabled && (
+                <div className="space-y-2">
+                  <Label>Repeat Count</Label>
+                  <Slider
+                    value={[globalSettings.repeatCount]}
+                    min={1}
+                    max={10}
+                    step={1}
+                    onValueChange={([value]) =>
+                      updateGlobalSettings({ repeatCount: value })
+                    }
+                    className="[&_[role=slider]]:h-4 [&_[role=slider]]:w-4"
                   />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>1x</span>
+                    <span>{globalSettings.repeatCount}x</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </PopoverContent>
         </Popover>
+
+        {verseNumber < totalVerses && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleNextVerse}
+                className="w-8 h-8 p-0 rounded-full hover:bg-accent"
+              >
+                <SkipForward className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="top">Next Verse</TooltipContent>
+          </Tooltip>
+        )}
       </div>
-
-      {verseNumber < totalVerses && (
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={isLoading}
-              onClick={handleNextVerse}
-              className={cn(
-                "w-8 h-8 p-0 rounded-full",
-                "hover:bg-accent hover:text-primary",
-                "active:scale-95 transition-all"
-              )}
-            >
-              <SkipForward className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="top">Next verse</TooltipContent>
-        </Tooltip>
-      )}
-
-      {error && (
-        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
-          <span className="text-xs text-destructive bg-background/95 px-2 py-1 rounded-md shadow-sm" title={error}>
-            Error playing audio
-          </span>
-        </div>
-      )}
     </div>
+  );
+}
+
+export default function AudioPlayer(props: AudioPlayerProps) {
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <AudioPlayerContent {...props} />
+    </Suspense>
   );
 }

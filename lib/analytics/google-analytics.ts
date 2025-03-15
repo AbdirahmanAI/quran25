@@ -20,7 +20,7 @@ export function initializeAnalytics() {
   }
 
   const loadGtag = () => {
-    if (window.gtag) return;
+    if (typeof window.gtag === 'function') return;
 
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() {
@@ -47,7 +47,7 @@ export function initializeAnalytics() {
 }
 
 export function trackPageView(url: string) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
   
   window.gtag('config', process.env.NEXT_PUBLIC_GA_ID!, {
     page_path: url,
@@ -55,7 +55,7 @@ export function trackPageView(url: string) {
 }
 
 export function trackEvent(action: string, category: string, label?: string, value?: number) {
-  if (typeof window === 'undefined' || !window.gtag) return;
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') return;
 
   window.gtag('event', action, {
     event_category: category,

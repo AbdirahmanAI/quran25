@@ -1,5 +1,11 @@
 import { SITE_CONFIG } from '@/lib/constants';
 
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
+
 class AdSenseService {
   private static instance: AdSenseService;
   private initialized = false;
@@ -42,13 +48,14 @@ class AdSenseService {
         }
 
         // Only push config once
-        if (!window.adsbygoogle.loaded) {
+        const adsense = window.adsbygoogle as any;
+        if (!adsense.loaded) {
           window.adsbygoogle.push({
             google_ad_client: this.clientId,
             enable_page_level_ads: true,
             overlays: false // Disable overlay ads
           });
-          window.adsbygoogle.loaded = true;
+          adsense.loaded = true;
         }
 
         this.initialized = true;

@@ -1,6 +1,12 @@
 // Client-side analytics implementation
 import { SITE_CONFIG } from '@/lib/constants';
 
+interface AnalyticsEvent {
+  type: string;
+  data?: Record<string, any>;
+  timestamp: number;
+}
+
 class Analytics {
   private static instance: Analytics;
   private queue: AnalyticsEvent[] = [];
@@ -20,12 +26,20 @@ class Analytics {
   }
 
   public track(type: string, data?: Record<string, any>) {
+    const event: AnalyticsEvent = {
+      type,
+      data,
+      timestamp: Date.now()
+    };
+
     // For static export, send directly to GA
-    if (SITE_CONFIG.analytics.enabled && window.gtag) {
+    if (SITE_CONFIG.analytics.enabled && typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', type, {
         ...data,
-        timestamp: Date.now()
+        timestamp: event.timestamp
       });
+    } else {
+      this.queue.push(event);
     }
   }
 

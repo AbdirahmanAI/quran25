@@ -1,4 +1,4 @@
-import { Chapter } from '@/types';
+import { Chapter } from '@/lib/types';
 
 const API_BASE = 'https://api.qurancdn.com/api/qdc';
 

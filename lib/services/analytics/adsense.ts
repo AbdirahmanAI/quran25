@@ -1,6 +1,14 @@
 'use client';
 
+'use client';
+
 import { AnalyticsError } from './errors';
+
+declare global {
+  interface Window {
+    adsbygoogle: any[];
+  }
+}
 
 class AdSenseService {
   private static instance: AdSenseService;
@@ -36,12 +44,13 @@ class AdSenseService {
         }
         
         // Check if already loaded
-        if (!window.adsbygoogle.loaded) {
+        const adsense = window.adsbygoogle as any;
+        if (!adsense.loaded) {
           window.adsbygoogle.push({
             google_ad_client: this.clientId,
             enable_page_level_ads: true
           });
-          window.adsbygoogle.loaded = true;
+          adsense.loaded = true;
         }
         
         this.initialized = true;

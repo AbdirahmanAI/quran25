@@ -4,7 +4,7 @@ interface GenerateMetaProps {
   title: string;
   description: string;
   path: string;
-  type?: string;
+  type?: 'website' | 'article';
   image?: string;
 }
 

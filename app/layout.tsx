@@ -3,7 +3,9 @@ import { Inter, Plus_Jakarta_Sans, Noto_Sans } from 'next/font/google';
 import { Providers } from '@/components/providers';
 import { SITE_CONFIG } from '@/lib/constants';
 import type { Metadata } from 'next';
+import { viewport } from '@/lib/meta';
 import GoogleTagManager from '@/components/analytics/google-tag-manager';
+import { Suspense } from 'react';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -43,15 +45,6 @@ export const metadata: Metadata = {
     shortcut: ['/icons/icon-192x192.png']
   },
   manifest: '/manifest.json',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#000000' }
-  ],
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -65,18 +58,22 @@ export const metadata: Metadata = {
   }
 };
 
+export { viewport };
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`}>
       <head>
         <GoogleTagManager />
       </head>
-      <body className="antialiased" suppressHydrationWarning>
-        <Providers>{children}</Providers>
+      <body>
+        <Suspense>
+          <Providers>{children}</Providers>
+        </Suspense>
       </body>
     </html>
   );

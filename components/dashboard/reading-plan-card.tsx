@@ -71,7 +71,7 @@ export default function ReadingPlanCard({ plan, onEdit, onDelete }: ReadingPlanC
             </span>
           </div>
 
-          {plan.lastRead && (
+          {plan.progress.lastRead && (
             <p className="text-xs text-muted-foreground">
               Last read: {format(new Date(plan.progress.lastRead), 'MMM d, yyyy')}
             </p>

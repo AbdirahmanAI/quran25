@@ -54,13 +54,13 @@ export default function SearchResults({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.05 }}
           >
-            <Link href={`/quran/${result.chapter}${result.isChapter ? '' : `#verse-${result.verse}`}`}>
+            <Link href={`/quran/${result.chapter}${result.verse ? `#verse-${result.verse}` : ''}`}>
               <Card className="p-4 hover:bg-accent transition-colors">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
                     <BookOpen className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">
-                      {result.isChapter ? `Chapter ${result.chapter}` : result.verseKey}
+                      {result.verse ? result.verseKey : `Chapter ${result.chapter}`}
                     </span>
                   </div>
                 </div>

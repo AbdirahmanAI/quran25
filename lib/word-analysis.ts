@@ -58,7 +58,7 @@ export async function getVerseWordAnalysis(verseKey: string): Promise<VerseAnaly
     url.searchParams.set('word_fields', 'text_uthmani,text_indopak,transliteration,translation,root,grammar');
     url.searchParams.set('translation_fields', 'text');
 
-    const response = await fetchWithRetry(url);
+    const response = await fetchWithRetry(url.toString());
 
     const data = await response.json();
     
@@ -74,11 +74,11 @@ export async function getVerseWordAnalysis(verseKey: string): Promise<VerseAnaly
       text: word.text_uthmani || word.text_indopak || '',
       transliteration: word.transliteration?.text || '',
       translation: word.translation?.text || word.text_translation || '',
-      rootWord: word.root?.text || word.root?.arabic || word.root || null,
+      rootWord: word.root?.text || word.root?.arabic || word.root || undefined,
       grammarInfo: word.grammar ? {
         type: word.grammar?.type || '',
         details: word.grammar?.description || ''
-      } : null
+      } : undefined
     }));
 
     return {
@@ -89,6 +89,5 @@ export async function getVerseWordAnalysis(verseKey: string): Promise<VerseAnaly
     console.error('Word analysis error:', error);
     const message = error instanceof Error ? error.message : 'Failed to load word analysis';
     throw new Error(message);
-    return null;
   }
 }

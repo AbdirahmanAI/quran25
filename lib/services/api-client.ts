@@ -3,10 +3,10 @@
 import { API_CONFIG } from '@/lib/config';
 import { APIError } from '@/lib/errors';
 
-interface RequestConfig extends RequestInit {
+interface RequestConfig extends Omit<RequestInit, 'cache'> {
   timeout?: number;
   retries?: number;
-  cache?: boolean;
+  useCache?: boolean;
 }
 
 class APIClient {
@@ -40,8 +40,9 @@ class APIClient {
     const id = setTimeout(() => controller.abort(), timeout);
 
     try {
+      const { useCache, ...fetchConfig } = config || {};
       const response = await fetch(url, {
-        ...config,
+        ...fetchConfig,
         signal: controller.signal,
         headers: {
           'Accept': 'application/json',
@@ -61,7 +62,7 @@ class APIClient {
     const cacheKey = this.getCacheKey(url, config);
     
     // Check cache if enabled
-    if (config?.cache !== false) {
+    if (config?.useCache !== false) {
       const cached = this.cache.get(cacheKey);
       if (cached && this.isCacheValid(cached.timestamp)) {
         return cached.data as T;
@@ -86,7 +87,7 @@ class APIClient {
         const data = await response.json();
 
         // Cache the successful response if caching is enabled
-        if (config?.cache !== false) {
+        if (config?.useCache !== false) {
           this.cache.set(cacheKey, {
             data,
             timestamp: Date.now()
