@@ -58,10 +58,14 @@ const nextConfig = {
   poweredByHeader: false,
   trailingSlash: true,
   experimental: {
-    optimizeCss: true
+    optimizeCss: true,
+    optimizePackageImports: ['@radix-ui/react-icons', 'lucide-react']
   },
   staticPageGenerationTimeout: 300,
-  swcMinify: true
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production'
+  }
 };
 
 module.exports = nextConfig;

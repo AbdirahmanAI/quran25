@@ -31,6 +31,13 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+          NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+
+      # Ensure CSS files are in place
+      - name: Copy CSS files
+        run: |
+          mkdir -p out/_next/static/css
+          cp .next/static/css/*.css out/_next/static/css/
 
       # Install Netlify CLI
       - name: Install Netlify CLI
