@@ -1,31 +1,22 @@
 [build]
   command = "npm run build"
   publish = "out"
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF ./"
 
 [build.environment]
-  NODE_VERSION = "18"
   NEXT_TELEMETRY_DISABLED = "1"
-  NEXT_PUBLIC_STATIC_EXPORT = "true"
-  NEXT_PUBLIC_API_BASE = "https://api.qurancdn.com/api/qdc"
-  NEXT_PUBLIC_AUDIO_BASE = "https://everyayah.com/data"
-  NEXT_PUBLIC_BASE_URL = "https://qurankareem.app"
-  NEXT_PUBLIC_BASE_PATH = ""
-  NEXT_PUBLIC_ENABLE_ANALYTICS = "true"
-  NEXT_PUBLIC_ENABLE_ADSENSE = "true"
-  NEXT_PUBLIC_ENABLE_OFFLINE_MODE = "true"
-  NEXT_PUBLIC_ENABLE_DEBUG = "false"
+  NODE_VERSION = "18"
   NPM_FLAGS = "--no-audit --no-fund"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [[headers]]
   for = "/*"
   [headers.values]
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
     X-Frame-Options = "DENY"
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Content-Security-Policy = """
       default-src 'self';
       script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com;
@@ -36,9 +27,18 @@
       font-src 'self' data: https://fonts.gstatic.com;
       frame-ancestors 'none';
       worker-src 'self' blob:;
-      manifest-src 'self';
-      upgrade-insecure-requests;
+      manifest-src 'self'
     """
+
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
 
 # Cache settings for all routes
 [[redirects]]
@@ -51,11 +51,6 @@
   from = "/quran/*"
   to = "/quran/index.html"
   status = 200
-
-[[headers]]
-  for = "/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
 
 # Cache settings for HTML files
 [[headers]]

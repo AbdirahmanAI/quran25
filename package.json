@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && mkdir -p out/icons && cp -r public/icons/* out/icons/ && cp public/manifest.json out/manifest.json && cp public/robots.txt out/robots.txt && touch out/.nojekyll && cp -r public/screenshots out/screenshots",
+    "build": "next build && cp -r public/icons public/manifest.json public/robots.txt out/ && touch out/.nojekyll",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
