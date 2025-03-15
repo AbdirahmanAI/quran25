@@ -65,6 +65,16 @@ const nextConfig = {
   swcMinify: true,
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production'
+  },
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_URL || '',
+  webpack: (config, { isServer }) => {
+    config.module.rules.push({
+      test: /\.css$/,
+      use: ['style-loader', 'css-loader', 'postcss-loader'],
+    });
+
+    return config;
   }
 };
 
