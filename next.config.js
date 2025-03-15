@@ -38,19 +38,9 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ];
-  },
-  reactStrictMode: true,
-  distDir: '.next',
-  poweredByHeader: false,
-  trailingSlash: true,
+  output: 'export',
   images: {
+    unoptimized: true,
     domains: ['api.qurancdn.com', 'everyayah.com'],
     remotePatterns: [
       {
@@ -63,6 +53,18 @@ const nextConfig = {
       }
     ]
   },
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: securityHeaders,
+      },
+    ];
+  },
+  reactStrictMode: true,
+  distDir: '.next',
+  poweredByHeader: false,
+  trailingSlash: true,
   experimental: {
     optimizeCss: true
   },
