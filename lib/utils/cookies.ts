@@ -3,7 +3,6 @@ import { COOKIE_NAMES, COOKIE_DEFAULTS } from '@/lib/constants/cookies';
 
 export interface CookieConsent {
   necessary: boolean;
-  analytics: boolean;
   marketing: boolean;
   preferences: boolean;
   timestamp: string;
@@ -21,7 +20,6 @@ export const getConsentCookie = (): CookieConsent | null => {
 export const setConsentCookie = (consent: Partial<CookieConsent>) => {
   const newConsent: CookieConsent = {
     necessary: true, // Always required
-    analytics: false,
     marketing: false,
     preferences: false,
     timestamp: new Date().toISOString(),

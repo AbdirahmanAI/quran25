@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 interface RateLimitResult {
   success: boolean;
   limit?: number;
@@ -9,7 +11,7 @@ const rateLimitMap = new Map<string, { count: number; timestamp: number }>();
 const WINDOW_SIZE = 60 * 1000; // 1 minute
 const MAX_REQUESTS = 60; // 60 requests per minute
 
-export async function rateLimit(request: Request): Promise<RateLimitResult> {
+export async function rateLimit(request: NextRequest): Promise<RateLimitResult> {
   if (process.env.NODE_ENV === 'development') {
     return { success: true };
   }

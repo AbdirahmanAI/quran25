@@ -64,3 +64,28 @@ export function initializeSecurity() {
     });
   }
 }
+
+interface SecurityEvent {
+  type: string;
+  message: string;
+  timestamp: string;
+  metadata?: Record<string, unknown>;
+}
+
+export async function reportSecurityEvent(event: SecurityEvent) {
+  try {
+    const response = await fetch('/api/security', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(event),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to report security event:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Error reporting security event:', error);
+  }
+}

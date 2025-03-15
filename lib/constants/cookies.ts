@@ -7,13 +7,14 @@ export const COOKIE_CATEGORIES = {
 
 export const COOKIE_NAMES = {
   CONSENT: 'cookie-consent',
-  ANALYTICS_CONSENT: 'ga-consent',
-  PREFERENCES: 'user-preferences',
+  THEME: 'theme',
+  FONT: 'font',
+  LANGUAGE: 'language',
+  LAST_VISITED: 'last-visited'
 } as const;
 
 export const COOKIE_DEFAULTS = {
   path: '/',
-  sameSite: 'lax' as const,
-  expires: 365, // days
-  // Remove secure and domain from defaults to allow override
-};
+  secure: true,
+  sameSite: 'lax'
+} as const;

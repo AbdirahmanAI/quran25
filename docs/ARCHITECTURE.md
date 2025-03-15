@@ -300,18 +300,6 @@ graph LR
    - Offline fallbacks
    - User notifications
 
-## Analytics Integration
-
-1. **User Analytics**
-   - Page views
-   - Feature usage
-   - Error tracking
-
-2. **Performance Metrics**
-   - Core Web Vitals
-   - Custom metrics
-   - Real user monitoring
-
 ## Accessibility Features
 
 1. **ARIA Support**
@@ -335,3 +323,59 @@ graph LR
    - Multiple translations
    - Language switching
    - RTL/LTR handling
+
+# Architecture Overview
+
+## Core Components
+
+1. **User Interface**
+   - Next.js for server-side rendering and routing
+   - React components for interactive UI elements
+   - Tailwind CSS for styling
+
+2. **Data Management**
+   - Server-side data fetching
+   - Client-side state management
+   - Caching and performance optimization
+
+3. **Security**
+   - Content Security Policy (CSP)
+   - CORS configuration
+   - Input validation and sanitization
+   - XSS prevention
+   - CSRF protection
+
+4. **Performance**
+   - Code splitting and lazy loading
+   - Image optimization
+   - Caching strategies
+   - Performance monitoring
+
+5. **Internationalization**
+   - Multi-language support
+   - RTL/LTR handling
+   - Localized content
+
+6. **Accessibility**
+   - ARIA attributes
+   - Keyboard navigation
+   - Screen reader support
+   - Color contrast compliance
+
+7. **Error Handling**
+   - Client-side error boundaries
+   - Server-side error handling
+   - Error logging and monitoring
+   - User-friendly error messages
+
+8. **Testing**
+   - Unit tests
+   - Integration tests
+   - End-to-end tests
+   - Performance testing
+
+9. **Deployment**
+   - CI/CD pipeline
+   - Environment configuration
+   - Build optimization
+   - Monitoring and logging

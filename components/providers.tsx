@@ -5,18 +5,12 @@ import { TooltipProvider } from '@/components/ui/tooltip';
 import { AudioProvider } from '@/lib/audio-context';
 import { FontProvider } from '@/lib/font-context';
 import { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { Toaster } from '@/components/ui/toaster';
 import CookieConsent from '@/components/cookie-consent';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import PageViewTracker from '@/components/analytics/page-view-tracker';
 import { clearLocalStorageIfNeeded } from '@/lib/utils';
 import { Suspense } from 'react';
-
-const GoogleAnalytics = dynamic(() => import('./analytics/google-analytics'), {
-  ssr: false
-});
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -45,12 +39,8 @@ export function Providers({ children }: ProvidersProps) {
                 </Suspense>
               </main>
               <Footer />
-              <Suspense fallback={null}>
-                <PageViewTracker />
-                <GoogleAnalytics />
-                <Toaster />
-                <CookieConsent />
-              </Suspense>
+              <CookieConsent />
+              <Toaster />
             </div>
           </TooltipProvider>
         </FontProvider>

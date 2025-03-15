@@ -25,11 +25,11 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' *.google-analytics.com *.googletagmanager.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval';
       style-src 'self' 'unsafe-inline' fonts.googleapis.com;
       img-src 'self' data: https: blob: *;
       font-src 'self' fonts.gstatic.com;
-      connect-src 'self' *.google-analytics.com *.googleapis.com https://everyayah.com https://*.everyayah.com *;
+      connect-src 'self' https://everyayah.com https://*.everyayah.com *;
       media-src 'self' https://everyayah.com https://*.everyayah.com https: data: blob: *;
       frame-src 'self';
       worker-src 'self' blob:;
@@ -53,14 +53,6 @@ const nextConfig = {
       }
     ]
   },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ];
-  },
   reactStrictMode: true,
   distDir: '.next',
   poweredByHeader: false,
@@ -68,12 +60,8 @@ const nextConfig = {
   experimental: {
     optimizeCss: true
   },
-  staticPageGenerationTimeout: 120,
-  swcMinify: true,
-  env: {
-    NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
-    NEXT_PUBLIC_ADSENSE_ID: process.env.NEXT_PUBLIC_ADSENSE_ID
-  }
+  staticPageGenerationTimeout: 300,
+  swcMinify: true
 };
 
 module.exports = nextConfig;

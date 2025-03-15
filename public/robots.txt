@@ -1,13 +1,10 @@
+# *
 User-agent: *
 Allow: /
-Allow: /quran/
-Allow: /search/
-Allow: /about/
-Allow: /privacy/
-Allow: /terms/
 
-Disallow: /api/
-Disallow: /_next/
-Disallow: /static/
+# Host
+Host: https://quran25.netlify.app
 
-Sitemap: https://qurankareem.app/sitemap.xml
+# Sitemaps
+Sitemap: https://quran25.netlify.app/sitemap.xml
+Sitemap: https://qurankareem.app/server-sitemap.xml

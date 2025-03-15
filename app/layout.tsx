@@ -4,7 +4,6 @@ import { Providers } from '@/components/providers';
 import { SITE_CONFIG } from '@/lib/constants';
 import type { Metadata } from 'next';
 import { viewport } from '@/lib/meta';
-import GoogleTagManager from '@/components/analytics/google-tag-manager';
 import { Suspense } from 'react';
 
 const inter = Inter({
@@ -67,9 +66,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${plusJakarta.variable} ${notoSans.variable}`}>
-      <head>
-        <GoogleTagManager />
-      </head>
+      <head />
       <body>
         <Suspense>
           <Providers>{children}</Providers>

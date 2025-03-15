@@ -2,15 +2,7 @@ export const SITE_CONFIG = {
   name: 'Quran Kareem',
   description: 'Experience the Divine Words through modern technology',
   url: process.env.NEXT_PUBLIC_BASE_URL!,
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
-  analytics: {
-    enabled: process.env.NEXT_PUBLIC_ENABLE_ANALYTICS === 'true',
-    gaId: process.env.NEXT_PUBLIC_GA_ID
-  },
-  adsense: {
-    enabled: process.env.NEXT_PUBLIC_ENABLE_ADSENSE === 'true',
-    clientId: process.env.NEXT_PUBLIC_ADSENSE_ID
-  }
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || ''
 };
 
 export const NAVIGATION = {
